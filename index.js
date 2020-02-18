@@ -7,9 +7,9 @@ const ESPORTAL_BASE = 'https://api.esportal.com';
 async function get_esportal_demos(esportal_username) {
 	const esportal_user = `${ESPORTAL_BASE}/user_profile/get?username=${esportal_username}`;
 	
-	const { id: esportal_uid } = await fetchData(esportal_user);
+	const { id: esportal_uid } = await fetch_data(esportal_user);
 	const esportal_latest_matches = `${ESPORTAL_BASE}/user_profile/get_latest_matches?id=${esportal_uid}`;
-	const matches = await fetchData(esportal_latest_matches);
+	const matches = await fetch_data(esportal_latest_matches);
 	
 	for (const match of matches) {
 		if (demo_already_parsed()) {
@@ -34,7 +34,7 @@ async function get_esportal_demos(esportal_username) {
 	}
 }
 
-function fetchData(url) {
+function fetch_data(url) {
 	return new Promise(async (resolve, reject) => {
 		const response = await fetch(url);
 		const json = await response.json();
