@@ -7,7 +7,17 @@ const ESPORTAL_BASE = 'https://api.esportal.com';
 async function get_esportal_demos(esportal_username) {
 	const esportal_user = `${ESPORTAL_BASE}/user_profile/get?username=${esportal_username}`;
 	
-	const { id: esportal_uid } = await fetch_data(esportal_user);
+	let esportal_uid;
+
+	try {
+		const { id } = await fetch_data(esportal_user);
+		esportal_uid = id;
+	} catch(error_code) {
+		if (error_code === 404) {
+			return console.log('Username does not exist in esportal');
+		}
+	}
+
 	const esportal_latest_matches = `${ESPORTAL_BASE}/user_profile/get_latest_matches?id=${esportal_uid}`;
 	const matches = await fetch_data(esportal_latest_matches);
 	
@@ -37,9 +47,13 @@ async function get_esportal_demos(esportal_username) {
 function fetch_data(url) {
 	return new Promise(async (resolve, reject) => {
 		const response = await fetch(url);
-		const json = await response.json();
+		
+		if (response.ok) {
+			const json = await response.json();
+			return resolve(json);
+		}
 
-		return resolve(json);
+		return reject(response.status);
 	});
 }
 
@@ -51,4 +65,4 @@ function demo_already_parsed(match_id) {
 }
 
 
-get_esportal_demos('larvenlucas');
+get_esportal_demos('larven_lucas');
