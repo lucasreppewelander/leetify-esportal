@@ -65,4 +65,4 @@ function demo_already_parsed(match_id) {
 }
 
 
-get_esportal_demos('larven_lucas');
+get_esportal_demos('larvenlucas');
